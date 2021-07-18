@@ -27,5 +27,6 @@ test("Renders appropriate number of colors passed in through mock", async ()=> {
 
     await waitFor(() => {
         expect(colors).toHaveLength(1);
+    })
     //Keep in mind that our service is called on mount for this component.
 });
