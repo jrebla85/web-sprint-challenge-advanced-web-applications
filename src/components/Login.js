@@ -47,7 +47,6 @@ const Login = () => {
           </div>
         </form>
       </div>
-
       <p id="error" className="error">{error}</p>
     </div>
   );
