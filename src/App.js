@@ -11,6 +11,7 @@ function App() {
   const logOut = () => {
     localStorage.removeItem("token")
   }
+  
   return (
     <Router>
       <div className="App">

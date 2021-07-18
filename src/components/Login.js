@@ -1,4 +1,4 @@
-import React, { sideEffect, useState } from "react";
+import React, { useState } from "react";
 import { axiosWithAuth } from '../helpers/axiosWithAuth'
 import { useHistory } from 'react-router-dom'
 
@@ -8,6 +8,8 @@ const Login = () => {
 
   const [form, setForm] = useState({username: "", password: ""})
   const {push} = useHistory()  
+  const [error, setError] = useState();
+
   const handleChange = (e) => {
     setForm({
       ...form,
@@ -17,6 +19,11 @@ const Login = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault()
+
+    if (!form.username || !form.password) {
+      setError('You must enter both a username and password.')
+    }
+
     axiosWithAuth().post('/login', form)
       .then(res => {
         localStorage.setItem('token', res.data.payload)
@@ -25,8 +32,8 @@ const Login = () => {
       .catch(err => console.log(err))
   }
 
-  const error = "";
-  //replace with error state
+  // const error = "";
+  // //replace with error state
 
   return (
     <div>
