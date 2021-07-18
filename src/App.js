@@ -7,12 +7,16 @@ import Login from "./components/Login";
 import "./styles.scss";
 
 function App() {
+
+  const logOut = () => {
+    localStorage.removeItem("token")
+  }
   return (
     <Router>
       <div className="App">
         <header>
           Color Picker Sprint Challenge
-          <a data-testid="logoutButton" href="#">logout</a>
+          <a onClick={logOut} data-testid="logoutButton" href="http://localhost:3000">logout</a>
         </header> 
         <PrivateRoute path="/bubbles" component={BubblePage}/>
 
