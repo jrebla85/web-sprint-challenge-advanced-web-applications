@@ -21,7 +21,9 @@ const Login = () => {
     e.preventDefault()
 
     if (!form.username || !form.password) {
-      setError('You must enter both a username and password.')
+      setError('You must enter both a username and password')
+    } else if (form.username !== 'Lambda' || form.password !== 'School') {
+      setError('Incorrect username or password')
     }
 
     axiosWithAuth().post('/login', form)
@@ -50,7 +52,7 @@ const Login = () => {
             <input type="password" id="password" name="password" value={form.password} onChange={handleChange} />
           </div>
           <div>
-            <button type="submit">Submit!</button>
+            <button type="submit" id="error">Submit!</button>
           </div>
         </form>
       </div>

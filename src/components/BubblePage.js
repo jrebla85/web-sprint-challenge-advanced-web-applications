@@ -22,6 +22,18 @@ const BubblePage = () => {
   };
 
   const saveEdit = (editColor) => {
+    axiosWithAuth()
+    .put(`/colors/${editColor.id}`, editColor)
+        .then((res) => {
+            let index = colors.findIndex((color) => color.id === editColor.id);
+            colors[index] = editColor
+            setColors([
+              ...colors
+            ])
+        })
+        .catch((err) => {
+            console.log(err)
+        })
   };
 
   const deleteColor = (colorToDelete) => {
