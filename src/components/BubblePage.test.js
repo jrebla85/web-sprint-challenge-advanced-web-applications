@@ -1,8 +1,6 @@
 import React from 'react';
 import MutationObserver from 'mutationobserver-shim';
-
 import { render, screen, wait, waitFor} from "@testing-library/react";
-import userEvent from '@testing-library/user-event';
 import BubblePage from './BubblePage';
 import fetchColorService from '../services/fetchColorService';
 
@@ -15,14 +13,14 @@ const testColor = {
 }
 
 test("Renders without errors", ()=> {
-    render(<BubblePage />)
+    render(<BubblePage colors={testColor}/>)
     
 });
 
 test("Renders appropriate number of colors passed in through mock", async ()=> {
-    fetchColorServices.mockResolvedValueOnce(testColor);
+    fetchColorService.mockResolvedValueOnce(testColor);
 
-    render(<BubblePage />);
+    render(<BubblePage colors={testColor}/>);
     const colors = screen.getAllByTestId("color");
 
     await waitFor(() => {

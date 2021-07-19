@@ -12,7 +12,6 @@ const BubblePage = () => {
     fetchColorService()
       .then(res => {
         setColors(res.data)
-        console.log(res.data)
       })
       .catch(err => console.log(err))
   }, []);
@@ -36,7 +35,17 @@ const BubblePage = () => {
         })
   };
 
-  const deleteColor = (colorToDelete) => {
+  const deleteColor = (e) => (colorToDelete) => {
+    e.preventDefault();
+    axiosWithAuth()
+    .delete(`/colors/${colorToDelete.id}`)
+    .then((res) => {
+      setColors(colors.filter(color => color.id !== colorToDelete.id))
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+    setColors(null)
   };
 
   return (
