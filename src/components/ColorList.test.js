@@ -1,30 +1,55 @@
 import React from 'react';
-import MutationObserver from 'mutationobserver-shim';
-import EditMenu from './EditMenu';
-import userEvent from '@testing-library/user-event';
-import { render, screen} from "@testing-library/react";
+import {render, screen, waitFor} from "@testing-library/react";
 import ColorList from './ColorList';
+import userEvent from "@testing-library/user-event";
 
-const testColor = {
-    color: "blue",
-    code: { hex: "#7fffd4" },
-    id: 1
-}
-
-const noColor = []
+const testColorList = [
+        {
+            color: 'aliceblue',
+            code: {
+                hex: '#f0f8ff',
+            },
+            id: 1,
+        },
+        {
+            color: 'limegreen',
+            code: {
+                hex: '#99ddbc',
+            },
+            id: 2,
+        },
+        {
+            color: 'aqua',
+            code: {
+                hex: '#00ffff',
+            },
+            id: 3,
+        },
+    ];
 
 test("Renders an empty list of colors without errors", () => {
-    render(<ColorList color={noColor} />)
+    render(<ColorList colors={[]} />);
+    const colorList = screen.getByText(/colors/i);
+    expect(colorList).toBeDefined;
+    expect(colorList).not.toBeNull;
 });
 
 test("Renders a list of colors without errors", () => {
-    render(<ColorList color={testColor} />)
+    render(<ColorList colors={testColorList} />);
+    const colorList = screen.getAllByTestId('color');
+    expect(colorList).toHaveLength(3);
 });
 
-test("Renders the EditForm when editing = true and does not render EditForm when editing = false", () => {
-    const toggleEdit = jest.fn()
-    render(<ColorList color={testColor} />);
-    let editing = screen.queryByTestId("color");
-    userEvent.click(editing);
-    expect(toggleEdit).toBeCalled();
+test("Renders the EditForm when editing = true and does not render EditForm when editing = false", async () => {
+    const { rerender } = render(<ColorList colors={testColorList} editing={true} />);
+    await waitFor(() => {
+        const color = screen.getByText(/aqua/i);
+        userEvent.click(color);
+        const editColor = screen.queryAllByTestId('editMenu');
+        expect(editColor).not.toBeNull;
+        expect(editColor).toHaveLength(1);
+        rerender(<ColorList colors={testColorList} editing={false} />);
+        const checkEditMenu = screen.queryAllByTestId('editMenu');
+        expect(checkEditMenu).toHaveLength(0);
+    })
 });

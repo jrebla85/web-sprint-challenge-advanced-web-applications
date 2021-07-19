@@ -20,32 +20,35 @@ const BubblePage = () => {
     setEditing(value);
   };
 
-  const saveEdit = (editColor) => {
-    axiosWithAuth()
-    .put(`/colors/${editColor.id}`, editColor)
-        .then((res) => {
-            let index = colors.findIndex((color) => color.id === editColor.id);
-            colors[index] = editColor
-            setColors([
-              ...colors
-            ])
-        })
-        .catch((err) => {
-            console.log(err)
-        })
+  const saveEdit = editColor => {
+    return colors.map(color => {
+      if ( color.id === editColor.id ) {
+        axiosWithAuth()
+            .put(`/colors/${editColor.id}`, editColor)
+            .then( res => {
+                setColors( colors.map( color => {
+                  if ( color.id === Number( res.data.id ) ) {
+                    return res.data
+                  } else {
+                    return color
+                  }
+                }))
+                setEditing(false)
+                }
+            )
+            .catch( err => console.log(err) )
+      } else {
+        return color
+      }
+    })
   };
 
-  const deleteColor = (e) => (colorToDelete) => {
-    e.preventDefault();
-    axiosWithAuth()
-    .delete(`/colors/${colorToDelete.id}`)
-    .then((res) => {
-      setColors(colors.filter(color => color.id !== colorToDelete.id))
-    })
-    .catch((err) => {
-      console.log(err)
-    })
-    setColors(null)
+  const deleteColor = (colorToDelete) => {
+    axiosWithAuth().delete(`/colors/${colorToDelete.id}`)
+        .then( res => {
+            setColors( colors.filter( color => Number( color.id ) !== Number( res.data )))
+        })
+        .catch( err => console.log(err) )
   };
 
   return (
